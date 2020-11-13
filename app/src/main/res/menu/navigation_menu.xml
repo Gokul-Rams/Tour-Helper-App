@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="all">
+        <item android:title="Home"
+            android:id="@+id/homenavoption"
+            android:checked="true"
+            android:icon="@drawable/icon_home"
+            />
+        <item android:title="Destinations"
+            android:id="@+id/destinationsnavoption"
+            android:icon="@drawable/icon_destinations"
+            />
+        <item android:title="Foods"
+            android:id="@+id/foodsnavoption"
+            android:icon="@drawable/icon_food"/>
+        <item android:title="Guides"
+            android:id="@+id/guidenavoption"
+            android:icon="@drawable/ion_guide"/>
+    </group>
+    <item android:title="options">
+        <menu>
+            <item
+                android:title="Help"
+                android:id="@+id/helpnav_option"
+                android:icon="@drawable/icon_help"/>
+            <item android:title="Settings"
+                android:id="@+id/settingnav_option"
+                android:icon="@drawable/icon_setting"/>
+        </menu>
+    </item>
+</menu>
