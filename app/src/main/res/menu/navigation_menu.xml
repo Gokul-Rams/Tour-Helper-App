@@ -10,9 +10,9 @@
             android:id="@+id/destinationsnavoption"
             android:icon="@drawable/icon_destinations"
             />
-        <item android:title="Foods"
-            android:id="@+id/foodsnavoption"
-            android:icon="@drawable/icon_food"/>
+        <item android:title="Friends Connect"
+            android:id="@+id/connectnavoption"
+            android:icon="@drawable/icon_connect"/>
         <item android:title="Guides"
             android:id="@+id/guidenavoption"
             android:icon="@drawable/ion_guide"/>
@@ -26,6 +26,9 @@
             <item android:title="Settings"
                 android:id="@+id/settingnav_option"
                 android:icon="@drawable/icon_setting"/>
+            <item android:title="Sign as Guide"
+                android:id="@+id/guidesignnavoption"
+                android:icon="@drawable/icon_guidesignin"/>
         </menu>
     </item>
 </menu>
