@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Add to Queue"
+        android:id="@+id/addtoqueuemenu"
+        android:icon="@drawable/icon_addtoqueue"
+        app:showAsAction="always"
+        android:orderInCategory="1"/>
+    <item android:title="Add to favorate"
+        android:id="@+id/addtofavmenu"
+        android:icon="@drawable/icon_favorate"
+        app:showAsAction="always"/>
+</menu>
