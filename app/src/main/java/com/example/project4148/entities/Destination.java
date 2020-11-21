@@ -1,7 +1,10 @@
-package com.example.project4148;
+package com.example.project4148.entities;
 
 public class Destination {
-    String name,zone,rating;
+    public String name,zone,rating;
+
+    public Destination() {
+    }
 
     public Destination(String name, String zone, String rating) {
         this.name = name;

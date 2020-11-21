@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.project4148.entities.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -62,7 +62,7 @@ public class AdddetailsActivity extends AppCompatActivity {
                 else {
                     anim.startanimation();
                     DatabaseReference ref = db.getReference().child("userdetails");
-                    currentuser temp = new currentuser(etname.getText().toString().trim(),
+                    CurrentUser temp = new CurrentUser(etname.getText().toString().trim(),
                             user.getEmail(),
                             Long.parseLong(etphno.getText().toString().trim()),
                             false);

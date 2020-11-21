@@ -15,10 +15,10 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.project4148.entities.Guide;
+import com.example.project4148.entities.GuideAbs;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -111,23 +111,101 @@ public class GuidesigninActivity extends AppCompatActivity {
 
     public void donebtnclicked(View view)
     {
-        anim.startanimation();
-        DatabaseReference ref = db.getReference().child("userdetails");
-        ref.child(user.getUid()).child("isguide").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                anim.stopanimation();
-                if(task.isSuccessful())
-                {
-                    Toast.makeText(GuidesigninActivity.this, "Sucessful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(GuidesigninActivity.this,HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+        String des,type;
+        ArrayList<String> lang,areas;
+        lang = new ArrayList<>();
+        areas = new ArrayList();
+
+        if(rbindudvial.isSelected())
+        {
+            type = "ind";
+        }
+        else{
+            type = "org";
+        }
+        des = tides.getEditText().getText().toString().trim();
+        lang.addAll(lanlist);
+        areas.addAll(arealist);
+
+        if(des.isEmpty() || type.isEmpty() || lang.isEmpty() || areas.isEmpty()){
+            Toast.makeText(this, "Empty feilds", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            anim.startanimation();
+            DatabaseReference ref;
+            ref = db.getReference().child("guide").child(user.getUid());
+            Guide temp = new Guide(des,type,Applicationclass.currentappuser.name,"not yet",lang,areas);
+            ref.setValue(temp).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        Toast.makeText(GuidesigninActivity.this, "guideadded", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        anim.stopanimation();
+                        Toast.makeText(GuidesigninActivity.this, "not added", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
-                else {
-                    Toast.makeText(GuidesigninActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+            });
+
+
+            GuideAbs tempguideabs = new GuideAbs(Applicationclass.currentappuser.name,"not yet",auth.getUid(),areas);
+
+            ref = db.getReference().child("guidelist");
+            ref.child(auth.getUid()).setValue(tempguideabs).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        Toast.makeText(GuidesigninActivity.this, "Sucess", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        anim.stopanimation();
+                        Toast.makeText(GuidesigninActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
+            });
+
+            ref = db.getReference().child("guide_list_by_area");
+            for(int i=0;i<areas.size();i++)
+            {
+                ref.child(areas.get(i)).child(auth.getUid()).setValue(tempguideabs).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            Toast.makeText(GuidesigninActivity.this, "Sucess", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            anim.stopanimation();
+                            Toast.makeText(GuidesigninActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                });
             }
-        });
+
+            ref = db.getReference().child("userdetails");
+            ref.child(user.getUid()).child("isguide").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    anim.stopanimation();
+                    if (task.isSuccessful()) {
+                        Toast.makeText(GuidesigninActivity.this, "Sucessful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(GuidesigninActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        anim.stopanimation();
+                        Toast.makeText(GuidesigninActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            });
+
+        }
     }
 }

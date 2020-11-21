@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.project4148.entities.CurrentUser;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -106,8 +107,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(HomeActivity.this,AdddetailsActivity.class);
-                    intent.putExtra("name",applicationclass.currentappuser.name);
-                    intent.putExtra("phno",applicationclass.currentappuser.phno.toString());
+                    intent.putExtra("name", Applicationclass.currentappuser.name);
+                    intent.putExtra("phno", Applicationclass.currentappuser.phno.toString());
                     startActivity(intent);
                 }
             });
@@ -155,13 +156,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void assigncurrentuser(DataSnapshot dataSnapshot,String email) {
-        applicationclass.currentappuser = new currentuser(dataSnapshot.child("name").getValue().toString(),
+        Applicationclass.currentappuser = new CurrentUser(dataSnapshot.child("name").getValue().toString(),
                 email,
                 Long.parseLong(dataSnapshot.child("phno").getValue().toString()),
                 Boolean.parseBoolean(dataSnapshot.child("isguide").getValue().toString()));
 
-        tvheaderusername.setText("Hii " + applicationclass.currentappuser.name);
-        if(applicationclass.currentappuser.isguide==true)
+        tvheaderusername.setText("Hii " + Applicationclass.currentappuser.name);
+        if(Applicationclass.currentappuser.isguide==true)
         {
             tvheaderisguide.setText("( Guide )");
         }

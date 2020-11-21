@@ -1,11 +1,11 @@
-package com.example.project4148;
+package com.example.project4148.entities;
 
-public class currentuser {
-    String name,email;
-    Long phno;
-    Boolean isguide;
+public class CurrentUser {
+    public String name,email;
+    public Long phno;
+    public Boolean isguide;
 
-    public currentuser(String name, String email, Long phno, Boolean isguide) {
+    public CurrentUser(String name, String email, Long phno, Boolean isguide) {
         this.name = name;
         this.email = email;
         this.phno = phno;
@@ -13,7 +13,7 @@ public class currentuser {
     }
 
 
-    public currentuser() {
+    public CurrentUser() {
     }
 
     public String getName() {

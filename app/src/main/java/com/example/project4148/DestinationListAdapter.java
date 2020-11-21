@@ -1,27 +1,29 @@
 package com.example.project4148;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.project4148.entities.Destination;
+import com.example.project4148.entities.DestinationAbs;
 
 import java.util.ArrayList;
 
 public class DestinationListAdapter extends RecyclerView.Adapter<DestinationListAdapter.myviewholder> {
 
     Context parentcontext;
-    ArrayList<Destination> destinationlist;
+    public ArrayList<DestinationAbs> destinationlist;
 
-    public DestinationListAdapter(Context parentcontext, ArrayList<Destination> destinationlistfromact) {
+    public DestinationListAdapter(Context parentcontext) {
         this.parentcontext = parentcontext;
         destinationlist = new ArrayList<>();
-        destinationlist.addAll(destinationlistfromact);
     }
 
     @NonNull
@@ -34,9 +36,9 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
 
     @Override
     public void onBindViewHolder(@NonNull DestinationListAdapter.myviewholder holder, int position) {
-        holder.tvdesname.setText(destinationlist.get(position).name);
-        holder.tvrating.setText(destinationlist.get(position).rating);
-        holder.tvzonename.setText(destinationlist.get(position).zone);
+        holder.tvdesname.setText(destinationlist.get(position).getTitle());
+        holder.tvrating.setText(destinationlist.get(position).getTotal_rating().toString()+"*");
+        holder.tvzonename.setText(destinationlist.get(position).getZone());
     }
 
     @Override
@@ -54,6 +56,13 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
             tvdesname = itemView.findViewById(R.id.tvlistdesname);
             tvzonename = itemView.findViewById(R.id.tvlistzonename);
             tvrating = itemView.findViewById(R.id.tvlistrating);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 }
