@@ -1,7 +1,6 @@
 package com.example.project4148;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project4148.entities.Destination;
 import com.example.project4148.entities.DestinationAbs;
 import com.example.project4148.listners.destinationlistlistners;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -25,6 +29,9 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
     public ArrayList<DestinationAbs> destinationlist,selecteddestinationlist;
     destinationlistlistners listner;
     Boolean onselectlistflag;
+    FirebaseDatabase db;
+    boolean sucessflag;
+    Loading_animation anim;
 
 
     public DestinationListAdapter(Context parentcontext, Fragment fragmentitsadded) {
@@ -33,6 +40,8 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
         listner = (destinationlistlistners) fragmentitsadded;
         onselectlistflag = false;
         selecteddestinationlist = new ArrayList<>();
+        db = FirebaseDatabase.getInstance();
+        anim = new Loading_animation(parentcontext);
     }
 
     @NonNull
@@ -109,10 +118,43 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
         }
     }
 
-    public void addtoqueuemenuclicked() {
+    //used only with destination home frag
+    public void additemstoqueue() {
         if(selecteddestinationlist.isEmpty())
         {
             Toast.makeText(parentcontext, "select destnations to add to queue", Toast.LENGTH_SHORT).show();
         }
+        else{
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseUser user = auth.getCurrentUser();
+            anim.startanimation();
+            DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());
+            for(int i=0;i<selecteddestinationlist.size();i++)
+            {
+                ref.child(selecteddestinationlist.get(i).getTitle()).setValue(selecteddestinationlist.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()==true)
+                        {
+                            sucessflag = true;
+                        }
+                        else {
+                            sucessflag = false;
+                            Toast.makeText(parentcontext, "Failed to add tolist", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                if(sucessflag==false){
+                    anim.stopanimation();
+                    break;
+                }
+            }
+            if(sucessflag==true) {
+                anim.stopanimation();
+                Toast.makeText(parentcontext, "Items Added to queue", Toast.LENGTH_SHORT).show();
+                listner.itemsinlistselectionexits();
+            }
+        }
     }
+
 }

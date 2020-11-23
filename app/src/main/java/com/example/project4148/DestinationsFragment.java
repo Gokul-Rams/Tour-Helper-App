@@ -1,13 +1,16 @@
 package com.example.project4148;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.Switch;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project4148.entities.Destination;
 import com.example.project4148.entities.DestinationAbs;
 import com.example.project4148.listners.destinationlistlistners;
+import com.example.project4148.listners.functionfromfragmentlistner;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DestinationsFragment extends Fragment implements destinationlistlistners, Toolbar.OnMenuItemClickListener {
 
@@ -42,10 +49,14 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
     ImageButton selectbackbtn;
     CheckBox cbselectall;
     androidx.appcompat.widget.Toolbar toolbar;
+    functionfromfragmentlistner listner;
+    FloatingActionButton queuebtn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_destinations,container,false);
+        final View view = inflater.inflate(R.layout.fragment_destinations,container,false);
+
+        listner = (functionfromfragmentlistner) getActivity();
 
         deslistsearchView = view.findViewById(R.id.searchhomedeslist);
         destinationrecycler = view.findViewById(R.id.recyclerdestinationhome);
@@ -53,6 +64,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         loadinganim = view.findViewById(R.id.loading_card_layout_destinations);
         selectbackbtn = view.findViewById(R.id.Select_back_btn_destination_home);
         cbselectall = view.findViewById(R.id.cb_selectall_destination_main);
+        queuebtn = view.findViewById(R.id.show_queue_btn);
 
         toolbar = getActivity().findViewById(R.id.home_toolbar);
         toolbar.setOnMenuItemClickListener(this);
@@ -99,26 +111,60 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         filterbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                ConstraintLayout view = new ConstraintLayout(getContext());
+                view = (ConstraintLayout) LayoutInflater.from(getContext()).inflate(R.layout.custom_destination_filter_dialog,view,false);
+                builder.setView(view);
+                final Spinner filterspinner = view.findViewById(R.id.spinner_zone_filter);
+                ArrayList<String> filterlist = new ArrayList<>();
+                filterlist.addAll(Arrays.asList(new String[]{"Coimbatore", "Kanyakumari", "Madurai", "Ooty", "Tirunelveli and Tuty"}));
+                filterspinner.setAdapter(new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,filterlist));
 
+                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        updatedeslistbyzone((String) filterspinner.getSelectedItem());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
         selectbackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectbackbtnclicked();
+                selecttoolclosed();
             }
         });
 
+        queuebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listner.replacefragment(new DestinationQueueFragment());
+            }
+        });
         //cbselectall.setOn
         return view;
     }
+
+
 
     @Override
     public void iteminlistselected() {
         selectbackbtn.setVisibility(View.VISIBLE);
         cbselectall.setVisibility(View.VISIBLE);
     }
+
 
     public void updatedeslist()
     {
@@ -148,7 +194,36 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         });
     }
 
-    public void selectbackbtnclicked(){
+    private void updatedeslistbyzone(String zonequery) {
+        loadinganim.setVisibility(View.VISIBLE);
+        destinationlist.clear();
+        DatabaseReference ref = db.getReference().child("deslistbyzone").child(zonequery);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot temp:dataSnapshot.getChildren())
+                {
+                    DestinationAbs tempdes = temp.getValue(DestinationAbs.class);
+                    destinationlist.add(tempdes);
+                }
+                adapter.destinationlist.clear();
+                adapter.destinationlist.addAll(destinationlist);
+                adapter.notifyDataSetChanged();
+                loadinganim.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                adapter.destinationlist.clear();
+                destinationlist.clear();
+                Toast.makeText(getContext(), "Network Error!..", Toast.LENGTH_SHORT).show();
+                loadinganim.setVisibility(View.INVISIBLE);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void selecttoolclosed(){
         selectbackbtn.setVisibility(View.GONE);
         cbselectall.setVisibility(View.GONE);
         adapter.onselectlistflag=false;
@@ -157,10 +232,9 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         updatedeslist();
     }
 
-
-    public void menuitemclicked(MenuItem item)
-    {
-
+    @Override
+    public void itemsinlistselectionexits() {
+        selecttoolclosed();
     }
 
     @Override
@@ -168,7 +242,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         switch (item.getItemId())
         {
             case R.id.addtoqueuemenu:
-                adapter.addtoqueuemenuclicked();
+                adapter.additemstoqueue();
         }
         return false;
     }

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project4148.entities.CurrentUser;
+import com.example.project4148.listners.functionfromfragmentlistner;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeActivity extends AppCompatActivity implements functionfromfragmentlistner,NavigationView.OnNavigationItemSelectedListener{
 
     NavigationView navview;
     DrawerLayout drawer;
@@ -47,6 +48,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     FirebaseDatabase db;
     Fragment fragonscreen;
     int flagfragonscreen;
+    /*flag frag on screen
+    1-homefrag
+    2-destination frag
+    3-destination queue frag*/
     Loading_animation anim;
 
     @Override
@@ -237,21 +242,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu){
-        if(flagfragonscreen == 2)
+        switch (flagfragonscreen)
         {
-            menu.findItem(R.id.addtoqueuemenu).setVisible(true);
-            menu.findItem(R.id.addtofavmenu).setVisible(true);
-        }
-        else
-        {
-            if(flagfragonscreen == 1)
-            {
-                menu.findItem(R.id.addtoqueuemenu).setVisible(false);
+            //destination fragment added
+            case 2:menu.findItem(R.id.addtoqueuemenu).setVisible(true);
                 menu.findItem(R.id.addtofavmenu).setVisible(true);
-            }
+                //home fragment added
+            case 1:menu.findItem(R.id.addtoqueuemenu).setVisible(false);
+                menu.findItem(R.id.addtofavmenu).setVisible(true);
+            //destination queue added
+            case 3:menu.findItem(R.id.addtofavmenu).setVisible(false);
+                   menu.findItem(R.id.addtoqueuemenu).setVisible(false);
+
         }
         return true;
     }
 
 
+    @Override
+    public void replacefragment(Fragment fragtoadd) {
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.replace(R.id.fragmentcontainer,fragtoadd);
+        flagfragonscreen=3;
+        trans.addToBackStack("queue fragment added");
+        trans.commit();
+    }
 }
