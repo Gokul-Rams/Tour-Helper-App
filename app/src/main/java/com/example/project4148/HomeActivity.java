@@ -247,12 +247,15 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
             //destination fragment added
             case 2:menu.findItem(R.id.addtoqueuemenu).setVisible(true);
                 menu.findItem(R.id.addtofavmenu).setVisible(true);
+                break;
                 //home fragment added
             case 1:menu.findItem(R.id.addtoqueuemenu).setVisible(false);
                 menu.findItem(R.id.addtofavmenu).setVisible(true);
+                break;
             //destination queue added
             case 3:menu.findItem(R.id.addtofavmenu).setVisible(false);
                    menu.findItem(R.id.addtoqueuemenu).setVisible(false);
+                   break;
 
         }
         return true;
@@ -264,6 +267,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.fragmentcontainer,fragtoadd);
         flagfragonscreen=3;
+        invalidateOptionsMenu();
         trans.addToBackStack("queue fragment added");
         trans.commit();
     }

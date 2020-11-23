@@ -110,7 +110,7 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
                     destinationlist.get(getPosition()).isselected=true;
                     selecteddestinationlist.add(destinationlist.get(getPosition()));
                     notifyItemChanged(getPosition());
-                    listner.iteminlistselected();
+                    listner.openselecttoolbar();
                     onselectlistflag=true;
                     return false;
                 }
@@ -152,8 +152,42 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
             if(sucessflag==true) {
                 anim.stopanimation();
                 Toast.makeText(parentcontext, "Items Added to queue", Toast.LENGTH_SHORT).show();
-                listner.itemsinlistselectionexits();
+                listner.closeselecttoolbar();
             }
+        }
+    }
+
+    //use only on destination queue fragment
+    public void deletebtnclicked() {
+        anim.startanimation();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        DatabaseReference ref = db.getReference("destinationqueue").child(user.getUid());
+        sucessflag=true;
+        for(int i=0;i<selecteddestinationlist.size();i++)
+        {
+            ref.child(selecteddestinationlist.get(i).getTitle()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        sucessflag =true;
+                    }
+                    else {
+                        sucessflag=false;
+                    }
+                }
+            });
+            if(sucessflag == false){
+                anim.stopanimation();
+                Toast.makeText(parentcontext, "Internet trouble..", Toast.LENGTH_SHORT).show();
+                break;
+            }
+        }
+        if(sucessflag == true){
+            anim.stopanimation();
+            Toast.makeText(parentcontext, "Items deleted from queue", Toast.LENGTH_SHORT).show();
+            listner.closeselecttoolbar();
         }
     }
 

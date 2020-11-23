@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project4148.entities.Destination;
 import com.example.project4148.entities.DestinationAbs;
 import com.example.project4148.listners.destinationlistlistners;
 import com.example.project4148.listners.functionfromfragmentlistner;
@@ -62,8 +61,8 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         destinationrecycler = view.findViewById(R.id.recyclerdestinationhome);
         filterbtn = view.findViewById(R.id.ibfilterdeshome);
         loadinganim = view.findViewById(R.id.loading_card_layout_destinations);
-        selectbackbtn = view.findViewById(R.id.Select_back_btn_destination_home);
-        cbselectall = view.findViewById(R.id.cb_selectall_destination_main);
+        selectbackbtn = view.findViewById(R.id.Select_back_btn_destination_queue);
+        cbselectall = view.findViewById(R.id.cb_selectall_destination_queue);
         queuebtn = view.findViewById(R.id.show_queue_btn);
 
         toolbar = getActivity().findViewById(R.id.home_toolbar);
@@ -160,7 +159,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
 
 
     @Override
-    public void iteminlistselected() {
+    public void openselecttoolbar() {
         selectbackbtn.setVisibility(View.VISIBLE);
         cbselectall.setVisibility(View.VISIBLE);
     }
@@ -227,13 +226,12 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         selectbackbtn.setVisibility(View.GONE);
         cbselectall.setVisibility(View.GONE);
         adapter.onselectlistflag=false;
-        System.out.println(adapter.selecteddestinationlist.size());
         adapter.selecteddestinationlist.clear();
         updatedeslist();
     }
 
     @Override
-    public void itemsinlistselectionexits() {
+    public void closeselecttoolbar() {
         selecttoolclosed();
     }
 
