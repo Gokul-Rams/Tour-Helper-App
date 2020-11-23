@@ -2,6 +2,7 @@ package com.example.project4148;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -145,5 +146,10 @@ public class GuideFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed Check Internet", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void menuitemclicked(MenuItem item)
+    {
+
     }
 }

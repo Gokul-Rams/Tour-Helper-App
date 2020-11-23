@@ -3,6 +3,7 @@ package com.example.project4148.entities;
 public class DestinationAbs {
     String title,zone;
     Double total_rating;
+    public boolean isselected;
 
     public DestinationAbs() {
     }
@@ -11,6 +12,7 @@ public class DestinationAbs {
         this.title = title;
         this.zone = zone;
         this.total_rating = total_rating;
+        this.isselected = false;
     }
 
     public String getTitle() {
