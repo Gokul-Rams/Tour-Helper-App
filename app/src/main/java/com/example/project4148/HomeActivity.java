@@ -122,7 +122,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 }
             });
 
-            
+
             anim = new Loading_animation(this);
             //setting the user details
             db = FirebaseDatabase.getInstance();
