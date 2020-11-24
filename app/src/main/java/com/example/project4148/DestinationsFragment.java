@@ -116,14 +116,19 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
                 builder.setView(view);
                 final Spinner filterspinner = view.findViewById(R.id.spinner_zone_filter);
                 ArrayList<String> filterlist = new ArrayList<>();
-                filterlist.addAll(Arrays.asList(new String[]{"Coimbatore", "Kanyakumari", "Madurai", "Ooty", "Tirunelveli and Tuty"}));
+                filterlist.addAll(Arrays.asList(new String[]{"No filter","Coimbatore", "Kanyakumari", "Madurai", "Ooty", "Tirunelveli and Tuty"}));
                 filterspinner.setAdapter(new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,filterlist));
 
                 builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        updatedeslistbyzone((String) filterspinner.getSelectedItem());
+                        if(filterspinner.getSelectedItem().toString().toLowerCase().equals("no filter"))
+                        {
+                            updatedeslist();
+                        }else {
+                            updatedeslistbyzone((String) filterspinner.getSelectedItem());
+                        }
                     }
                 });
 

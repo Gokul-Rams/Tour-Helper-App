@@ -78,6 +78,8 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
         return view;
     }
 
+
+
     private void updatedatalist() {
         loading_card_view.setVisibility(View.VISIBLE);
         DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());

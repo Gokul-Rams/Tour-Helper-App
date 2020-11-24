@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
             finish();
         }
         else {
+            //intilizing variables
             toolbar = findViewById(R.id.home_toolbar);
             drawer = findViewById(R.id.homenav_drawer);
             navview = findViewById(R.id.home_navigetionniew);
@@ -79,8 +80,10 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
 
             setSupportActionBar(toolbar);
 
+            //setting up navigation listner
             navview.setNavigationItemSelectedListener(this);
 
+            //setting up navigation toogle
             ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(HomeActivity.this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
             DrawerArrowDrawable toogletoset = new DrawerArrowDrawable(this);
             toogletoset.setColor(Color.WHITE);
@@ -88,6 +91,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
             drawer.addDrawerListener(toogle);
             toogle.syncState();
 
+            //setting up home frag first
             fragmentManager = getSupportFragmentManager();
             FragmentTransaction trans = fragmentManager.beginTransaction();
             fragonscreen = new HomeFragment();
@@ -118,6 +122,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 }
             });
 
+            
             anim = new Loading_animation(this);
             //setting the user details
             db = FirebaseDatabase.getInstance();
@@ -144,6 +149,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         }
     }
 
+    //this method is used to get the user details if not got (executed at first entry)
     private void getuser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("update user");
@@ -160,6 +166,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         dialog.show();
     }
 
+    //method is uesd to asssign the current user to the application class's variable
     private void assigncurrentuser(DataSnapshot dataSnapshot,String email) {
         Applicationclass.currentappuser = new CurrentUser(dataSnapshot.child("name").getValue().toString(),
                 email,
@@ -234,12 +241,15 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         return true;
     }
 
+    //create option ment
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_homemenu,menu);
         return true;
     }
 
+    //this is to change the menu according to fragment on screen
+    //called by calling invalidteoptionmenu() method
     @Override
     public boolean onPrepareOptionsMenu(Menu menu){
         switch (flagfragonscreen)
@@ -261,7 +271,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         return true;
     }
 
-
+    //called to replace fraagment from an fragment overridden from functionfromfragmentlistner
     @Override
     public void replacefragment(Fragment fragtoadd) {
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
@@ -270,5 +280,27 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         invalidateOptionsMenu();
         trans.addToBackStack("queue fragment added");
         trans.commit();
+    }
+
+    //tohandlefrabment backstack
+    @Override
+    public void onBackPressed() {
+        final FragmentManager man = getSupportFragmentManager();
+        man.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                //fragment on home page visible on screen
+                if(man.getBackStackEntryCount() <= 0)
+                {
+                    //if destination is selected in nav view
+                    if(navview.getMenu().findItem(R.id.destinationsnavoption).isChecked())
+                    {
+                        flagfragonscreen =2;
+                    }
+                    invalidateOptionsMenu();
+                }
+            }
+        });
+        super.onBackPressed();
     }
 }
