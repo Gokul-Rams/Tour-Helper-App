@@ -219,6 +219,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         anim.stopanimation();
     }
 
+    //used to control navigation clicks
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction transaction;
@@ -247,6 +248,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 transaction = fragmentManager.beginTransaction();
                 fragonscreen = new ConnectFragment();
                 Applicationclass.flagfragonhomescreen = 5;
+                invalidateOptionsMenu();
                 transaction.replace(R.id.fragmentcontainer,fragonscreen);
                 transaction.commit();
                 drawer.closeDrawer(GravityCompat.START);
@@ -255,6 +257,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 transaction = fragmentManager.beginTransaction();
                 fragonscreen = new GuideFragment();
                 Applicationclass.flagfragonhomescreen=4;
+                invalidateOptionsMenu();
                 transaction.replace(R.id.fragmentcontainer,fragonscreen);
                 transaction.commit();
                 drawer.closeDrawer(GravityCompat.START);
@@ -297,17 +300,20 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 break;
                 //home fragment added
             case 1:menu.findItem(R.id.showqueuemenu).setVisible(false);
-                menu.findItem(R.id.addtofavmenu).setVisible(true);
+                menu.findItem(R.id.addtofavmenu).setVisible(false);
                 break;
             //destination queue added
             case 3:menu.findItem(R.id.addtofavmenu).setVisible(false);
                    menu.findItem(R.id.showqueuemenu).setVisible(false);
                    break;
             //guide fragment added
-            case 4:break;
+            case 4:menu.findItem(R.id.addtofavmenu).setVisible(true);
+                    menu.findItem(R.id.showqueuemenu).setVisible(false);
+                break;
             //connect fragment added
-            case 5: break;
-
+            case 5:menu.findItem(R.id.addtofavmenu).setVisible(true);
+                menu.findItem(R.id.showqueuemenu).setVisible(false);
+                break;
         }
         return true;
     }

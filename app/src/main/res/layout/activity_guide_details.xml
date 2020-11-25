@@ -36,6 +36,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_guide_details" />
 
+    <FrameLayout
+        android:id="@+id/guide_chat_fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivimage_guide_details">
+
+    </FrameLayout>
+
     <TextView
         android:id="@+id/tvname_guide_details"
         android:layout_width="0dp"
@@ -67,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ivimage_guide_details" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/tvcontent2_guide_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -93,10 +107,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/tvcontent2_guide_details" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/tvcontent1_guide_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -123,6 +137,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/tvcontent1_guide_details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -56,6 +56,7 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
 
     @Override
     public void onBindViewHolder(@NonNull DestinationListAdapter.myviewholder holder, int position) {
+        System.out.println(destinationlist.get(position).getLatLong());
         holder.tvdesname.setText(destinationlist.get(position).getTitle());
         holder.tvrating.setText(destinationlist.get(position).getTotal_rating().toString()+"*");
         holder.tvzonename.setText(destinationlist.get(position).getZone());

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Chat with guide"
+        android:id="@+id/chatwithguidemenu"
+        android:icon="@drawable/icon_chat"
+        app:showAsAction="always"/>
+    <item android:title="Add to favorate"
+        android:id="@+id/addtofavmenu_guide_details"
+        android:icon="@drawable/icon_favorate"
+        app:showAsAction="always"/>
+</menu>
