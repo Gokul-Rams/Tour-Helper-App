@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="Add to Queue"
-        android:id="@+id/addtoqueuemenu"
-        android:icon="@drawable/icon_addtoqueue"
+        android:id="@+id/showqueuemenu"
+        android:icon="@drawable/icon_queue"
         app:showAsAction="always"
         android:orderInCategory="1"/>
     <item android:title="Add to favorate"

@@ -1,6 +1,7 @@
 package com.example.project4148;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DestinationListAdapter extends RecyclerView.Adapter<DestinationListAdapter.myviewholder> {
 
@@ -102,6 +104,12 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
                             notifyItemChanged(getPosition());
                         }
                     }
+                    else {
+                        Intent intent = new Intent(parentcontext,DestinationDetailActivity.class);
+                        intent.putExtra("destination_name",destinationlist.get(getPosition()).getTitle());
+                        intent.putExtra("zone",destinationlist.get(getPosition()).getZone());
+                        parentcontext.startActivity(intent);
+                    }
                 }
             });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -128,32 +136,30 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
             FirebaseAuth auth = FirebaseAuth.getInstance();
             FirebaseUser user = auth.getCurrentUser();
             anim.startanimation();
-            DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());
+            HashMap<String,DestinationAbs> map = new HashMap();
             for(int i=0;i<selecteddestinationlist.size();i++)
             {
-                ref.child(selecteddestinationlist.get(i).getTitle()).setValue(selecteddestinationlist.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()==true)
-                        {
-                            sucessflag = true;
-                        }
-                        else {
-                            sucessflag = false;
-                            Toast.makeText(parentcontext, "Failed to add tolist", Toast.LENGTH_SHORT).show();
-                        }
+                map.put(selecteddestinationlist.get(i).getTitle(),selecteddestinationlist.get(i));
+            }
+            System.out.println(map.get(selecteddestinationlist.get(0).getTitle()));
+            DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());
+            ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        listner.closeselecttoolbar();
+                        Toast.makeText(parentcontext, "Sucessful", Toast.LENGTH_SHORT).show();
+                        anim.stopanimation();
+                        listner.opendestinationqueue();
                     }
-                });
-                if(sucessflag==false){
-                    anim.stopanimation();
-                    break;
+                    else {
+                        listner.closeselecttoolbar();
+                        Toast.makeText(parentcontext, "Failure", Toast.LENGTH_SHORT).show();
+                        anim.stopanimation();
+                    }
                 }
-            }
-            if(sucessflag==true) {
-                anim.stopanimation();
-                Toast.makeText(parentcontext, "Items Added to queue", Toast.LENGTH_SHORT).show();
-                listner.closeselecttoolbar();
-            }
+            });
         }
     }
 

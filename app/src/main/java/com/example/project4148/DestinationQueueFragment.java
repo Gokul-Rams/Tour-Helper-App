@@ -118,6 +118,11 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
         selecttoolbarclosed();
     }
 
+    @Override
+    public void opendestinationqueue() {
+
+    }
+
     public void selecttoolbarclosed()
     {
         deletebtn.setVisibility(View.GONE);

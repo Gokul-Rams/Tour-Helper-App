@@ -49,7 +49,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
     CheckBox cbselectall;
     androidx.appcompat.widget.Toolbar toolbar;
     functionfromfragmentlistner listner;
-    FloatingActionButton queuebtn;
+    FloatingActionButton addtoqueuebtn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         loadinganim = view.findViewById(R.id.loading_card_layout_destinations);
         selectbackbtn = view.findViewById(R.id.Select_back_btn_destination_queue);
         cbselectall = view.findViewById(R.id.cb_selectall_destination_queue);
-        queuebtn = view.findViewById(R.id.show_queue_btn);
+        addtoqueuebtn = view.findViewById(R.id.addtoqueue_destination_main);
 
         toolbar = getActivity().findViewById(R.id.home_toolbar);
         toolbar.setOnMenuItemClickListener(this);
@@ -151,10 +151,10 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
             }
         });
 
-        queuebtn.setOnClickListener(new View.OnClickListener() {
+        addtoqueuebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listner.replacefragment(new DestinationQueueFragment());
+                adapter.additemstoqueue();
             }
         });
         //cbselectall.setOn
@@ -241,11 +241,16 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
     }
 
     @Override
+    public void opendestinationqueue() {
+        listner.replacefragment(new DestinationQueueFragment());
+    }
+
+    @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.addtoqueuemenu:
-                adapter.additemstoqueue();
+            case R.id.showqueuemenu:
+                listner.replacefragment(new DestinationQueueFragment());
         }
         return false;
     }

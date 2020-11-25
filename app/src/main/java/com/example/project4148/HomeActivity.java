@@ -47,11 +47,6 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
     Button btnsignout;
     FirebaseDatabase db;
     Fragment fragonscreen;
-    int flagfragonscreen;
-    /*flag frag on screen
-    1-homefrag
-    2-destination frag
-    3-destination queue frag*/
     Loading_animation anim;
 
     @Override
@@ -91,14 +86,9 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
             drawer.addDrawerListener(toogle);
             toogle.syncState();
 
-            //setting up home frag first
+            //setting up fragment on screen first
             fragmentManager = getSupportFragmentManager();
-            FragmentTransaction trans = fragmentManager.beginTransaction();
-            fragonscreen = new HomeFragment();
-            trans.replace(R.id.fragmentcontainer, fragonscreen);
-            flagfragonscreen = 1;
-            invalidateOptionsMenu();
-            trans.commit();
+            setupfragmentonscreen();
 
             tvheaderusername.setText("Hello " + user.getEmail());
 
@@ -149,6 +139,51 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         }
     }
 
+    //this method is used to set the fragment when the activity created
+    private void setupfragmentonscreen() {
+        FragmentTransaction trans = fragmentManager.beginTransaction();
+        switch (Applicationclass.flagfragonhomescreen)
+        {
+            case 1:
+                fragonscreen = new HomeFragment();
+                navview.getMenu().findItem(R.id.homenavoption).setChecked(true);
+                trans.replace(R.id.fragmentcontainer, fragonscreen);
+                Applicationclass.flagfragonhomescreen = 1;
+                invalidateOptionsMenu();
+                trans.commit();
+                break;
+            case 2:fragonscreen = new DestinationsFragment();
+                navview.getMenu().findItem(R.id.destinationsnavoption).setChecked(true);
+                trans.replace(R.id.fragmentcontainer, fragonscreen);
+                Applicationclass.flagfragonhomescreen = 2;
+                invalidateOptionsMenu();
+                trans.commit();
+                break;
+            case 3:fragonscreen = new DestinationQueueFragment();
+                navview.getMenu().findItem(R.id.destinationsnavoption).setChecked(true);
+                trans.replace(R.id.fragmentcontainer, fragonscreen);
+                Applicationclass.flagfragonhomescreen = 2;
+                invalidateOptionsMenu();
+                trans.commit();
+                break;
+            case 4:fragonscreen = new GuideFragment();
+                navview.getMenu().findItem(R.id.guidenavoption).setChecked(true);
+                trans.replace(R.id.fragmentcontainer, fragonscreen);
+                Applicationclass.flagfragonhomescreen = 4;
+                invalidateOptionsMenu();
+                trans.commit();
+                break;
+            case 5:fragonscreen = new ConnectFragment();
+                navview.getMenu().findItem(R.id.connectnavoption).setChecked(true);
+                trans.replace(R.id.fragmentcontainer, fragonscreen);
+                Applicationclass.flagfragonhomescreen = 5;
+                invalidateOptionsMenu();
+                trans.commit();
+                break;
+
+        }
+    }
+
     //this method is used to get the user details if not got (executed at first entry)
     private void getuser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -194,7 +229,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 transaction = fragmentManager.beginTransaction();
                 fragonscreen = new HomeFragment();
                 transaction.replace(R.id.fragmentcontainer,fragonscreen);
-                flagfragonscreen = 1;
+                Applicationclass.flagfragonhomescreen = 1;
                 invalidateOptionsMenu();
                 transaction.commit();
                 drawer.closeDrawer(GravityCompat.START);
@@ -203,7 +238,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 transaction = fragmentManager.beginTransaction();
                 fragonscreen = new DestinationsFragment();
                 transaction.replace(R.id.fragmentcontainer,fragonscreen);
-                flagfragonscreen = 2;
+                Applicationclass.flagfragonhomescreen = 2;
                 invalidateOptionsMenu();
                 transaction.commit();
                 drawer.closeDrawer(GravityCompat.START);
@@ -211,6 +246,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
             case R.id.connectnavoption:
                 transaction = fragmentManager.beginTransaction();
                 fragonscreen = new ConnectFragment();
+                Applicationclass.flagfragonhomescreen = 5;
                 transaction.replace(R.id.fragmentcontainer,fragonscreen);
                 transaction.commit();
                 drawer.closeDrawer(GravityCompat.START);
@@ -218,6 +254,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
             case R.id.guidenavoption:
                 transaction = fragmentManager.beginTransaction();
                 fragonscreen = new GuideFragment();
+                Applicationclass.flagfragonhomescreen=4;
                 transaction.replace(R.id.fragmentcontainer,fragonscreen);
                 transaction.commit();
                 drawer.closeDrawer(GravityCompat.START);
@@ -252,20 +289,24 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
     //called by calling invalidteoptionmenu() method
     @Override
     public boolean onPrepareOptionsMenu(Menu menu){
-        switch (flagfragonscreen)
+        switch (Applicationclass.flagfragonhomescreen)
         {
             //destination fragment added
-            case 2:menu.findItem(R.id.addtoqueuemenu).setVisible(true);
+            case 2:menu.findItem(R.id.showqueuemenu).setVisible(true);
                 menu.findItem(R.id.addtofavmenu).setVisible(true);
                 break;
                 //home fragment added
-            case 1:menu.findItem(R.id.addtoqueuemenu).setVisible(false);
+            case 1:menu.findItem(R.id.showqueuemenu).setVisible(false);
                 menu.findItem(R.id.addtofavmenu).setVisible(true);
                 break;
             //destination queue added
             case 3:menu.findItem(R.id.addtofavmenu).setVisible(false);
-                   menu.findItem(R.id.addtoqueuemenu).setVisible(false);
+                   menu.findItem(R.id.showqueuemenu).setVisible(false);
                    break;
+            //guide fragment added
+            case 4:break;
+            //connect fragment added
+            case 5: break;
 
         }
         return true;
@@ -276,7 +317,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
     public void replacefragment(Fragment fragtoadd) {
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.fragmentcontainer,fragtoadd);
-        flagfragonscreen=3;
+        Applicationclass.flagfragonhomescreen=3;
         invalidateOptionsMenu();
         trans.addToBackStack("queue fragment added");
         trans.commit();
@@ -295,7 +336,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                     //if destination is selected in nav view
                     if(navview.getMenu().findItem(R.id.destinationsnavoption).isChecked())
                     {
-                        flagfragonscreen =2;
+                        Applicationclass.flagfragonhomescreen =2;
                     }
                     invalidateOptionsMenu();
                 }

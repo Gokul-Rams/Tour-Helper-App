@@ -88,20 +88,21 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="#FFFFFF"
+        android:backgroundTint="@color/Buttoncolor"
         android:src="@drawable/icon_mylocation"
         android:tooltipText="My location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/show_queue_btn"
+        android:id="@+id/addtoqueue_destination_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="#FFFFFF"
-        android:src="@drawable/icon_queue"
+        android:background="@color/Buttoncolor"
+        android:backgroundTint="@color/Buttoncolor"
+        android:src="@drawable/icon_addtoqueue"
         android:tooltipText="Add to queue"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButton2"
         app:layout_constraintEnd_toEndOf="parent" />
