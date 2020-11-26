@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,8 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
     FirebaseUser user;
     ImageButton deletebtn,selectbackbtn;
     CheckBox cb_selectall;
+    ImageButton selectbtn;
+    TextView tvtitle;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
         deletebtn = view.findViewById(R.id.ib_deletebtn_destination_queue);
         selectbackbtn = view.findViewById(R.id.Select_back_btn_destination_queue);
         cb_selectall = view.findViewById(R.id.cb_selectall_destination_queue);
+        selectbtn = view.findViewById(R.id.select_btn_destination_queue);
+        tvtitle = view.findViewById(R.id.tvtitle_destination_queue);
 
         recyclerdestinationqueue = view.findViewById(R.id.recycler_destination_queue);
         loading_card_view = view.findViewById(R.id.loading_card_layout_destinations_queue);
@@ -75,6 +80,14 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
             }
         });
 
+        selectbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openselecttoolbar();
+                adapter.onselectlistflag=true;
+            }
+        });
+
         return view;
     }
 
@@ -96,6 +109,10 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
                 adapter.destinationlist.addAll(destinationlist);
                 adapter.notifyDataSetChanged();
                 loading_card_view.setVisibility(View.INVISIBLE);
+                if(adapter.destinationlist.isEmpty())
+                {
+                    tvtitle.setText("Destination queue Empty");
+                }
             }
 
             @Override

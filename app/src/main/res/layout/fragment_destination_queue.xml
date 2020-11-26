@@ -57,10 +57,35 @@
                 android:layout_marginEnd="5dp"
                 android:background="@null"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/icon_delete" />
+
+            <ImageButton
+                android:id="@+id/select_btn_destination_queue"
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:src="@drawable/select"
+                app:layout_constraintBottom_toBottomOf="@+id/tvtitle_destination_queue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvtitle_destination_queue" />
+
+            <TextView
+                android:id="@+id/tvtitle_destination_queue"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Destination Queue"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/select_btn_destination_queue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cb_selectall_destination_queue" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

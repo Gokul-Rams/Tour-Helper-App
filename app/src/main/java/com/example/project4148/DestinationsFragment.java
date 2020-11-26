@@ -45,7 +45,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
     androidx.appcompat.widget.SearchView deslistsearchView;
     ImageButton filterbtn;
     FirebaseDatabase db;
-    ImageButton selectbackbtn;
+    ImageButton selectbackbtn,selectbtn;
     CheckBox cbselectall;
     androidx.appcompat.widget.Toolbar toolbar;
     functionfromfragmentlistner listner;
@@ -64,6 +64,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         selectbackbtn = view.findViewById(R.id.Select_back_btn_destination_queue);
         cbselectall = view.findViewById(R.id.cb_selectall_destination_queue);
         addtoqueuebtn = view.findViewById(R.id.addtoqueue_destination_main);
+        selectbtn = view.findViewById(R.id.select_btn_destination_main);
 
         toolbar = getActivity().findViewById(R.id.home_toolbar);
         toolbar.setOnMenuItemClickListener(this);
@@ -141,6 +142,14 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+            }
+        });
+
+        selectbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openselecttoolbar();
+                adapter.onselectlistflag = true;
             }
         });
 
