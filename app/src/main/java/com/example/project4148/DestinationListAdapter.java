@@ -137,13 +137,13 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
             FirebaseAuth auth = FirebaseAuth.getInstance();
             FirebaseUser user = auth.getCurrentUser();
             anim.startanimation();
-            HashMap<String,DestinationAbs> map = new HashMap();
+            DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());
+            /*HashMap<String,DestinationAbs> map = new HashMap();
             for(int i=0;i<selecteddestinationlist.size();i++)
             {
                 map.put(selecteddestinationlist.get(i).getTitle(),selecteddestinationlist.get(i));
             }
             System.out.println(map.get(selecteddestinationlist.get(0).getTitle()));
-            DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());
             ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -160,7 +160,37 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
                         anim.stopanimation();
                     }
                 }
-            });
+            });*/
+
+            final Integer[] insertcount = {0};
+            final boolean[] flag = {false};
+            for(int i=0;i<selecteddestinationlist.size();i++)
+            {
+                ref.child(selecteddestinationlist.get(i).getTitle()).setValue(selecteddestinationlist.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            insertcount[0] = insertcount[0] +1;
+                        }
+                        else {
+                            flag[0] = true;
+                        }
+                        if(insertcount[0]>=selecteddestinationlist.size() || flag[0] == true){
+                            if(flag[0] == true){
+                                Toast.makeText(parentcontext, "Failed Internet trouble", Toast.LENGTH_SHORT).show();
+                                anim.stopanimation();
+                            }
+                            else {
+                                Toast.makeText(parentcontext, "items added to queue", Toast.LENGTH_SHORT).show();
+                                anim.stopanimation();
+                                listner.closeselecttoolbar();
+                                listner.opendestinationqueue();
+                            }
+                        }
+                    }
+                });
+            }
         }
     }
 

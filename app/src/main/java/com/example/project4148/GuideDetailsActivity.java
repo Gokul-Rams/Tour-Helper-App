@@ -128,8 +128,10 @@ public class GuideDetailsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         final FragmentManager man = getSupportFragmentManager();
-        if(man.getBackStackEntryAt(man.getBackStackEntryCount()-1).getName().equals("chatfragmentadded")) {
-            chatfragmentremoved();
+        if(man.getBackStackEntryCount()>0) {
+            if (man.getBackStackEntryAt(man.getBackStackEntryCount() - 1).getName().equals("chatfragmentadded")) {
+                chatfragmentremoved();
+            }
         }
         super.onBackPressed();
     }
