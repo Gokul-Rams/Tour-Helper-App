@@ -16,8 +16,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AdddetailsActivity extends AppCompatActivity {
 
@@ -27,6 +30,8 @@ public class AdddetailsActivity extends AppCompatActivity {
     FirebaseDatabase db;
     FirebaseAuth auth;
     Loading_animation anim;
+    FirebaseUser user;
+    Boolean isguideflag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +55,7 @@ public class AdddetailsActivity extends AppCompatActivity {
         anim = new Loading_animation(this);
         db = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-        final FirebaseUser user = auth.getCurrentUser();
+        user = auth.getCurrentUser();
 
         btndone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,26 +66,48 @@ public class AdddetailsActivity extends AppCompatActivity {
                 }
                 else {
                     anim.startanimation();
-                    DatabaseReference ref = db.getReference().child("userdetails");
-                    CurrentUser temp = new CurrentUser(etname.getText().toString().trim(),
-                            user.getEmail(),
-                            Long.parseLong(etphno.getText().toString().trim()),
-                            false);
-                    ref.child(user.getUid()).setValue(temp).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            anim.stopanimation();
-                            if(task.isSuccessful())
-                            {
-                                Intent intent = new Intent(AdddetailsActivity.this,HomeActivity.class);
-                                startActivity(intent);
-                                finish();
+                    final DatabaseReference ref = db.getReference().child("userdetails");
+                    if(Applicationclass.currentappuser == null){
+                        isguideflag = false;
+                        updateuset(ref);
+                    }
+                    else{
+                        ref.child(user.getUid()).child("isguide").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                isguideflag = (Boolean) dataSnapshot.getValue();
+                                updateuset(ref);
                             }
-                            else{
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                anim.stopanimation();
                                 Toast.makeText(AdddetailsActivity.this, "Failed check internet", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    });
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    void updateuset(DatabaseReference ref){
+        CurrentUser temp = new CurrentUser(etname.getText().toString().trim(),
+                user.getEmail(),
+                Long.parseLong(etphno.getText().toString().trim()),
+                isguideflag,user.getUid());
+        ref.child(user.getUid()).setValue(temp).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                anim.stopanimation();
+                if(task.isSuccessful())
+                {
+                    Intent intent = new Intent(AdddetailsActivity.this,HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else{
+                    Toast.makeText(AdddetailsActivity.this, "Failed check internet", Toast.LENGTH_SHORT).show();
                 }
             }
         });

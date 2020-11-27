@@ -4,16 +4,26 @@ public class CurrentUser {
     public String name,email;
     public Long phno;
     public Boolean isguide;
+    public String uid;
 
-    public CurrentUser(String name, String email, Long phno, Boolean isguide) {
+    public CurrentUser(String name, String email, Long phno, Boolean isguide,String uid) {
         this.name = name;
         this.email = email;
         this.phno = phno;
         this.isguide = isguide;
+        this.uid = uid;
     }
 
 
     public CurrentUser() {
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {

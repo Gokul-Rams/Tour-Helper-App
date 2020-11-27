@@ -18,6 +18,7 @@ public class Loading_animation {
         builder.setView(R.layout.loading_customlayout);
 
         dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
     public void stopanimation()

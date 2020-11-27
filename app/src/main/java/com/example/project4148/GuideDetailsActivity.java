@@ -45,7 +45,7 @@ public class GuideDetailsActivity extends AppCompatActivity {
 
         db = FirebaseDatabase.getInstance();
 
-        chatFragment = new Guide_ChatFragment();
+        chatFragment = new Guide_ChatFragment(id);
         tvdes = findViewById(R.id.tvdes_guide_details);
         tvname = findViewById(R.id.tvname_guide_details);
         tvlan = findViewById(R.id.tvlan_guide_details);

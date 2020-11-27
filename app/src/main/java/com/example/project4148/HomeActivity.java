@@ -206,8 +206,7 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
         Applicationclass.currentappuser = new CurrentUser(dataSnapshot.child("name").getValue().toString(),
                 email,
                 Long.parseLong(dataSnapshot.child("phno").getValue().toString()),
-                Boolean.parseBoolean(dataSnapshot.child("isguide").getValue().toString()));
-
+                Boolean.parseBoolean(dataSnapshot.child("isguide").getValue().toString()),dataSnapshot.getKey());
         tvheaderusername.setText("Hii " + Applicationclass.currentappuser.name);
         if(Applicationclass.currentappuser.isguide==true)
         {
