@@ -1,14 +1,26 @@
 package com.example.project4148;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.project4148.entities.DestinationAbs;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,15 +39,19 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class FinalDestinationActivity extends AppCompatActivity {
+    FirebaseDatabase db;
+    FirebaseUser user;
     Button back;
+    String places_names,places;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String places_names = "Ambasamuthiram,Tirunelveli,Madurai,Mukkudal";
-        StringBuilder index = new StringBuilder("0");
-        String places = "8.708776,77.447112;8.741222,77.694626;9.9252,78.1198;8.741911,77.519203";
+        db = FirebaseDatabase.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        places_names = "";
+        places = "";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finaldestinationmain);
-        distance_find_matrix exq = new distance_find_matrix();
         back = findViewById(R.id.backbuttonforfinaldestination);
         back.setOnClickListener( new View.OnClickListener(){
             @Override
@@ -43,76 +59,127 @@ public class FinalDestinationActivity extends AppCompatActivity {
                 goBack();
             }
         });
-        JSONObject result = null;
-        try {
-            result = exq.execute(places.split(";")).get();
-        } catch (ExecutionException | InterruptedException e) {
+        Thread t1 = new Thread(new initializePlaces());
+        t1.start();
+        initializeView();
+        try{
+            t1.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(result!=null){
+    }
+    private class initializePlaces implements Runnable {
+        public void run(){
+            DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    places_names="";
+                    places="";
+                    for(DataSnapshot temp:dataSnapshot.getChildren()){
+                        DestinationAbs tempobj = temp.getValue(DestinationAbs.class);
+                        assert tempobj != null;
+                        tempobj.isselected=false;
+                        places_names+=","+tempobj.getTitle();
+                        places+=";"+tempobj.getLatLong();
+                    }
+                    places_names=places_names.replaceFirst(",","");
+                    places=places.replaceFirst(";","");
+                    initializeView();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast error = Toast.makeText(getApplicationContext(),"Error Reload",Toast.LENGTH_SHORT);
+                    error.show();
+                }
+            });
+        }
+    }
+    private void initializeView(){
+            distance_find_matrix exq = new distance_find_matrix();
+            StringBuilder index = new StringBuilder("0");
+            JSONObject result = null;
             try {
-                JSONArray dis=null;
+                result = exq.execute(places.split(";")).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(result!=null){
                 try {
-                    dis = result.getJSONArray("distance");
+                    JSONArray dis=null;
+                    try {
+                        dis = result.getJSONArray("distance");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if(dis!=null) {
+                        int len = dis.length();
+                        int cur_node = 0, no_jumps = 0, low_ind;
+                        double lowest, data;
+                        do {
+                            JSONArray arr_cur = (JSONArray) dis.get(cur_node);
+                            low_ind = 0;
+                            lowest = Double.POSITIVE_INFINITY;
+                            for (int i = 0; i < len; i++) {
+                                if (String.valueOf(arr_cur.get(i)).equals("0")) {
+                                    data = 0.0;
+                                } else {
+                                    data = (Double) arr_cur.get(i);
+                                }
+                                if (data != 0.0 && data < lowest) {
+                                    if (!Arrays.asList(index.toString().split(",")).contains(String.valueOf(i))) {
+                                        lowest = data;
+                                        low_ind = i;
+                                    }
+                                }
+                            }
+                            index.append(",").append(Integer.valueOf(low_ind).toString());
+                            cur_node = low_ind;
+                            no_jumps++;
+                        } while (no_jumps != len - 1);
+                        List<String> ind = Arrays.asList(index.toString().split(","));
+                        StringBuilder Places = new StringBuilder();
+                        List<String> placeList = Arrays.asList(places_names.split(","));
+                        for (int i = 0; i < len; i++) {
+                            int j = Integer.parseInt(ind.get(i));
+                            Places.append(",").append(placeList.get(j));
+                        }
+                        Places = new StringBuilder(Places.toString().replaceFirst(",", ""));
+                        String[] PlaceLastList = Places.toString().split(",");
+                        ArrayList<Final_Destination_view> destinationList = new ArrayList<>();
+                        RecyclerView recycleViewFordestination = findViewById(R.id.PlacesFinalDisplayRecycler);
+                        RecyclerView.LayoutManager layout0 = new LinearLayoutManager(getBaseContext());
+                        for (int i = 0; i < PlaceLastList.length; i++) {
+                            destinationList.add(new Final_Destination_view(String.valueOf(i + 1), PlaceLastList[i]));
+                            RecyclerView.Adapter destinationadapter = new FinalDestinationListAdapter(destinationList);
+                            recycleViewFordestination.setLayoutManager(layout0);
+                            recycleViewFordestination.setAdapter(destinationadapter);
+                        }
+                    }
+                    else{
+                        ArrayList<Final_Destination_view> destinationList = new ArrayList<>();
+                        RecyclerView recycleViewFordestination = findViewById(R.id.PlacesFinalDisplayRecycler);
+                        RecyclerView.LayoutManager layout0 = new LinearLayoutManager(getBaseContext());
+                        destinationList.add(new Final_Destination_view("0","To be load"));
+                        RecyclerView.Adapter destinationadapter = new FinalDestinationListAdapter(destinationList);
+                        recycleViewFordestination.setLayoutManager(layout0);
+                        recycleViewFordestination.setAdapter(destinationadapter);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                assert dis != null;
-                int len = dis.length();
-                int cur_node=0,no_jumps=0,low_ind;
-                double lowest,data;
-                do {
-                    JSONArray arr_cur = (JSONArray) dis.get(cur_node);
-                    low_ind = 0;
-                    lowest = Double.POSITIVE_INFINITY;
-                    for (int i = 0; i < len; i++) {
-                        if (String.valueOf(arr_cur.get(i)).equals("0")) {
-                            data = 0.0;
-                        } else {
-                            data = (Double) arr_cur.get(i);
-                        }
-                        if (data != 0.0 && data < lowest) {
-                            if (!Arrays.asList(index.toString().split(",")).contains(String.valueOf(i))) {
-                                lowest = data;
-                                low_ind = i;
-                            }
-                        }
-                    }
-                    index.append(",").append(Integer.valueOf(low_ind).toString());
-                    cur_node = low_ind;
-                    no_jumps++;
-                } while (no_jumps != len - 1);
-                List<String> ind= Arrays.asList(index.toString().split(","));
-                StringBuilder Places= new StringBuilder();
-                List<String> placeList = Arrays.asList(places_names.split(","));
-                for(int i=0;i<len;i++){
-                    int j = Integer.parseInt(ind.get(i));
-                    Places.append(",").append(placeList.get(j));
-                }
-                Places = new StringBuilder(Places.toString().replaceFirst(",", ""));
-                String[] PlaceLastList = Places.toString().split(",");
+            }
+            else {
                 ArrayList<Final_Destination_view> destinationList = new ArrayList<>();
                 RecyclerView recycleViewFordestination = findViewById(R.id.PlacesFinalDisplayRecycler);
-                RecyclerView.LayoutManager layout0 = new LinearLayoutManager(this);
-                for(int i=0;i<PlaceLastList.length;i++){
-                    destinationList.add(new Final_Destination_view(String.valueOf(i+1),PlaceLastList[i]));
-                    RecyclerView.Adapter destinationadapter = new FinalDestinationListAdapter(destinationList);
-                    recycleViewFordestination.setLayoutManager(layout0);
-                    recycleViewFordestination.setAdapter(destinationadapter);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+                RecyclerView.LayoutManager layout0 = new LinearLayoutManager(getBaseContext());
+                destinationList.add(new Final_Destination_view("0", "Error Retry"));
+                RecyclerView.Adapter destinationadapter = new FinalDestinationListAdapter(destinationList);
+                recycleViewFordestination.setLayoutManager(layout0);
+                recycleViewFordestination.setAdapter(destinationadapter);
             }
-        }
-        else{
-            ArrayList<Final_Destination_view> destinationList = new ArrayList<>();
-            RecyclerView recycleViewFordestination = findViewById(R.id.PlacesFinalDisplayRecycler);
-            RecyclerView.LayoutManager layout0 = new LinearLayoutManager(this);
-            destinationList.add(new Final_Destination_view("0","Error Retry"));
-            RecyclerView.Adapter destinationadapter = new FinalDestinationListAdapter(destinationList);
-            recycleViewFordestination.setLayoutManager(layout0);
-            recycleViewFordestination.setAdapter(destinationadapter);
-        }
     }
     private void goBack(){
         Intent i = new Intent(FinalDestinationActivity.this,HomeActivity.class);

@@ -105,8 +105,15 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
     }
 
     private void openFinalRouteActivity(){
-        Intent i = new Intent(getContext(),FinalDestinationActivity.class);
-        startActivity(i);
+        if(destinationlist.isEmpty()||destinationlist.size()==1){
+            Toast tos = Toast.makeText(getContext(),"The list is less than 2!",Toast.LENGTH_LONG);
+            tos.show();
+        }
+        else{
+            System.out.println(destinationlist.size());
+            Intent i = new Intent(getContext(),FinalDestinationActivity.class);
+            startActivity(i);
+        }
     }
 
     private void updatedatalist() {
