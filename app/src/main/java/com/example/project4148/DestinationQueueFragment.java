@@ -105,7 +105,7 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
     }
 
     private void openFinalRouteActivity(){
-        if(destinationlist.isEmpty()||destinationlist.size()==1){
+        if(destinationlist.isEmpty()||destinationlist.size()<=2){
             Toast tos = Toast.makeText(getContext(),"The list is less than 2!",Toast.LENGTH_LONG);
             tos.show();
         }

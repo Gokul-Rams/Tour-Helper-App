@@ -28,7 +28,8 @@
             android:name=".HelpActivity"
             android:parentActivityName=".HomeActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".FinalDestinationActivity" />
+        <activity android:name=".FinalDestinationActivity"
+            android:parentActivityName=".HomeActivity"/>
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

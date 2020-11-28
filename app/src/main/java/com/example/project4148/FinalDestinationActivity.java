@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,24 +42,26 @@ import java.util.concurrent.ExecutionException;
 public class FinalDestinationActivity extends AppCompatActivity {
     FirebaseDatabase db;
     FirebaseUser user;
-    Button back;
     String places_names,places;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.finaldestinationmain);
+
+        toolbar = findViewById(R.id.toolbar_finaldestination);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Your Optimal Route..");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         db = FirebaseDatabase.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         places_names = "";
         places = "";
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.finaldestinationmain);
-        back = findViewById(R.id.backbuttonforfinaldestination);
-        back.setOnClickListener( new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                goBack();
-            }
-        });
+
         Thread t1 = new Thread(new initializePlaces());
         t1.start();
         initializeView();
