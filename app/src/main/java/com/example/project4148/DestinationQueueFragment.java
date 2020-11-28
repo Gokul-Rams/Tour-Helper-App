@@ -1,5 +1,7 @@
 package com.example.project4148;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project4148.entities.DestinationAbs;
 import com.example.project4148.listners.destinationlistlistners;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +43,7 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
     ImageButton deletebtn,selectbackbtn;
     CheckBox cb_selectall;
     ImageButton selectbtn;
+    ExtendedFloatingActionButton find_route;
     TextView tvtitle;
     @Nullable
     @Override
@@ -50,6 +55,7 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
         cb_selectall = view.findViewById(R.id.cb_selectall_destination_queue);
         selectbtn = view.findViewById(R.id.select_btn_destination_queue);
         tvtitle = view.findViewById(R.id.tvtitle_destination_queue);
+        find_route =view.findViewById(R.id.btnfindroute);
 
         recyclerdestinationqueue = view.findViewById(R.id.recycler_destination_queue);
         loading_card_view = view.findViewById(R.id.loading_card_layout_destinations_queue);
@@ -65,6 +71,13 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
         recyclerdestinationqueue.setAdapter(adapter);
         recyclerdestinationqueue.setLayoutManager(new LinearLayoutManager(getContext()));
         updatedatalist();
+
+        find_route.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                openFinalRouteActivity();
+            }
+        } );
 
         selectbackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,12 +104,16 @@ public class DestinationQueueFragment extends Fragment implements destinationlis
         return view;
     }
 
-
+    private void openFinalRouteActivity(){
+        Intent i = new Intent(getContext(),FinalDestinationActivity.class);
+        startActivity(i);
+    }
 
     private void updatedatalist() {
         loading_card_view.setVisibility(View.VISIBLE);
         DatabaseReference ref = db.getReference().child("destinationqueue").child(user.getUid());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 destinationlist.clear();
