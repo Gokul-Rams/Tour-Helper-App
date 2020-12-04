@@ -66,7 +66,7 @@ public class AdddetailsActivity extends AppCompatActivity {
                 }
                 else {
                     anim.startanimation();
-                    final DatabaseReference ref = db.getReference().child("userdetails");
+                    final DatabaseReference ref = db.getReference();
                     if(Applicationclass.currentappuser == null){
                         isguideflag = false;
                         updateuset(ref);
@@ -96,7 +96,7 @@ public class AdddetailsActivity extends AppCompatActivity {
                 user.getEmail(),
                 Long.parseLong(etphno.getText().toString().trim()),
                 isguideflag,user.getUid());
-        ref.child(user.getUid()).setValue(temp).addOnCompleteListener(new OnCompleteListener<Void>() {
+        ref.child("userdetails").child(user.getUid()).setValue(temp).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 anim.stopanimation();
