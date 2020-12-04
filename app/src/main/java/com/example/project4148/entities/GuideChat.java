@@ -1,12 +1,16 @@
 package com.example.project4148.entities;
 
 public class GuideChat {
-    String mes;
-    boolean byme;
+    String mes,senderid,receiverid,timestamp;
 
-    public GuideChat(String mes, boolean byme) {
+    public GuideChat() {
+    }
+
+    public GuideChat(String mes, String senderid, String receiverid, String timestamp) {
         this.mes = mes;
-        this.byme = byme;
+        this.senderid = senderid;
+        this.receiverid = receiverid;
+        this.timestamp = timestamp;
     }
 
     public String getMes() {
@@ -17,11 +21,27 @@ public class GuideChat {
         this.mes = mes;
     }
 
-    public boolean isByme() {
-        return byme;
+    public String getSenderid() {
+        return senderid;
     }
 
-    public void setByme(boolean byme) {
-        this.byme = byme;
+    public void setSenderid(String senderid) {
+        this.senderid = senderid;
+    }
+
+    public String getReceiverid() {
+        return receiverid;
+    }
+
+    public void setReceiverid(String receiverid) {
+        this.receiverid = receiverid;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

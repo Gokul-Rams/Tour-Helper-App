@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class GuideDetailsActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    String id;
+    String id,guidename;
     TextView tvdes,tvname,tvlan,tvareas,tvcontent1,tvcontent2;
     ImageView ivphoto;
     FirebaseDatabase db;
@@ -45,7 +45,6 @@ public class GuideDetailsActivity extends AppCompatActivity {
 
         db = FirebaseDatabase.getInstance();
 
-        chatFragment = new Guide_ChatFragment(id);
         tvdes = findViewById(R.id.tvdes_guide_details);
         tvname = findViewById(R.id.tvname_guide_details);
         tvlan = findViewById(R.id.tvlan_guide_details);
@@ -62,6 +61,7 @@ public class GuideDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentguide = dataSnapshot.getValue(Guide.class);
                 tvname.setText(currentguide.getName());
+                guidename = currentguide.getName();
                 tvdes.setText(currentguide.getDescription());
                 StringBuilder builder = new StringBuilder();
                 for(int i=0;i<currentguide.getLang().size();i++)
@@ -98,6 +98,7 @@ public class GuideDetailsActivity extends AppCompatActivity {
             case R.id.addtofavmenu_guide_details:
                 break;
             case R.id.chatwithguidemenu:
+                chatFragment = new Guide_ChatFragment(id,guidename);
                 FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
                 trans.replace(R.id.guide_chat_fragment_container,chatFragment);
                 trans.addToBackStack("chatfragmentadded");

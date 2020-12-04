@@ -18,6 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project4148.entities.Guide;
 import com.example.project4148.entities.GuideAbs;
+import com.example.project4148.listners.ChatlistFragment;
+import com.example.project4148.listners.functionfromfragmentlistner;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,14 +40,19 @@ public class GuideFragment extends Fragment {
     ArrayList<GuideAbs> guidelist;
     FirebaseDatabase db;
     SearchView searchView;
+    ExtendedFloatingActionButton chatlistbtn;
+    functionfromfragmentlistner listner;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guide,container,false);
 
+        listner = (functionfromfragmentlistner) getActivity();
+
         guiderecycler = view.findViewById(R.id.recycler_guidemain);
         loadinganim = view.findViewById(R.id.loading_card_layout_guide);
         searchView = view.findViewById(R.id.search_guide_main);
+        chatlistbtn = view.findViewById(R.id.chatlistbtn_guide_fragment);
         db = FirebaseDatabase.getInstance();
 
         loadinganim.setVisibility(View.INVISIBLE);
@@ -86,6 +95,12 @@ public class GuideFragment extends Fragment {
             }
         });
 
+        chatlistbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listner.replacefragment(new ChatlistFragment(),6);
+            }
+        });
         return view;
     }
 

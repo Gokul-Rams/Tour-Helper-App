@@ -11,7 +11,8 @@ public class Applicationclass extends Application {
     2-destination frag
     3-destination queue frag
     4-guide frag
-    5-friendsconnect*/
+    5-friendsconnect
+    6-chatlist*/
     public static int flagfragonhomescreen = 1;
     Applicationclass(){
         flagfragonhomescreen = 1;

@@ -51,7 +51,7 @@ public class GuideChatAdapter extends RecyclerView.Adapter<GuideChatAdapter.myho
 
     @Override
     public int getItemViewType(int position) {
-        if(chatlist.get(position).isByme()==true)
+        if(chatlist.get(position).getSenderid().equals(Applicationclass.currentappuser.uid))
          return 1;
         else
             return 2;

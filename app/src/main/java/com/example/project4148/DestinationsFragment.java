@@ -251,7 +251,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
 
     @Override
     public void opendestinationqueue() {
-        listner.replacefragment(new DestinationQueueFragment());
+        listner.replacefragment(new DestinationQueueFragment(),3);
     }
 
     @Override
@@ -259,7 +259,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         switch (item.getItemId())
         {
             case R.id.showqueuemenu:
-                listner.replacefragment(new DestinationQueueFragment());
+                listner.replacefragment(new DestinationQueueFragment(),3);
         }
         return false;
     }

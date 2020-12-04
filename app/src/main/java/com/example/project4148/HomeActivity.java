@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project4148.entities.CurrentUser;
+import com.example.project4148.listners.ChatlistFragment;
 import com.example.project4148.listners.functionfromfragmentlistner;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -180,7 +181,13 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                 invalidateOptionsMenu();
                 trans.commit();
                 break;
-
+            case 6:fragonscreen = new ChatlistFragment();
+                navview.getMenu().findItem(R.id.guidenavoption).setChecked(true);
+                trans.replace(R.id.fragmentcontainer, fragonscreen);
+                Applicationclass.flagfragonhomescreen = 6;
+                invalidateOptionsMenu();
+                trans.commit();
+                break;
         }
     }
 
@@ -313,16 +320,19 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
             case 5:menu.findItem(R.id.addtofavmenu).setVisible(true);
                 menu.findItem(R.id.showqueuemenu).setVisible(false);
                 break;
+            case 6:menu.findItem(R.id.addtofavmenu).setVisible(false);
+                menu.findItem(R.id.showqueuemenu).setVisible(false);
+                break;
         }
         return true;
     }
 
     //called to replace fraagment from an fragment overridden from functionfromfragmentlistner
     @Override
-    public void replacefragment(Fragment fragtoadd) {
+    public void replacefragment(Fragment fragtoadd,int fragmentflag) {
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.fragmentcontainer,fragtoadd);
-        Applicationclass.flagfragonhomescreen=3;
+        Applicationclass.flagfragonhomescreen=fragmentflag;
         invalidateOptionsMenu();
         trans.addToBackStack("queue fragment added");
         trans.commit();
@@ -342,6 +352,9 @@ public class HomeActivity extends AppCompatActivity implements functionfromfragm
                     if(navview.getMenu().findItem(R.id.destinationsnavoption).isChecked())
                     {
                         Applicationclass.flagfragonhomescreen =2;
+                    }
+                    if(navview.getMenu().findItem(R.id.guidenavoption).isChecked()){
+                        Applicationclass.flagfragonhomescreen=4;
                     }
                     invalidateOptionsMenu();
                 }
