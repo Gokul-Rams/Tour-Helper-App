@@ -130,6 +130,7 @@ public class Guide_ChatFragment extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful())
                             {
+                                etmes.setText("");
                             }
                             else {
                                 Toast.makeText(getContext(), "Internet trouble", Toast.LENGTH_SHORT).show();
