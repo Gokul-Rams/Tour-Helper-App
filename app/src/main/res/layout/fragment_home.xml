@@ -6,13 +6,115 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="home main"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="158dp"
+                android:layout_height="64dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="131dp"
+                android:layout_marginBottom="656dp"
+                android:shadowColor="@color/design_default_color_on_secondary"
+                android:shadowDx="5"
+                android:shadowDy="6"
+                android:shadowRadius="9"
+                android:text="HOME"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="203dp"
+                android:src="@mipmap/ic_logo_tourist_foreground">
+
+            </ImageView>
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="38dp"
+                android:layout_height="41dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="241dp"
+                android:layout_marginBottom="59dp"
+                app:srcCompat="@drawable/icon_mylocation" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="242dp"
+                android:layout_height="44dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="84dp"
+                android:layout_marginBottom="109dp"
+                android:text="You are currently in"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/location_in_home"
+                android:layout_width="133dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="87dp"
+                android:layout_marginBottom="64dp"
+                android:text="Location"
+                android:textAlignment="center"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="199dp"
+                android:layout_marginBottom="597dp"
+                android:shadowColor="@android:color/holo_red_dark"
+                android:shadowDx="2"
+                android:shadowDy="3"
+                android:shadowRadius="3"
+                android:text="We don't count stars"
+                android:textAlignment="center"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="59dp"
+                android:layout_marginBottom="598dp"
+                android:text="We reach them"
+                android:textAlignment="center"
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
