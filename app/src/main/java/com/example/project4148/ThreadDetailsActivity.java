@@ -31,7 +31,7 @@ public class ThreadDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         lvcommend = findViewById(R.id.recycler_comments_destination_detail);
-        qesholder = findViewById(R.id.qescontainer_thread_details)
+        qesholder = findViewById(R.id.qescontainer_thread_details);
 
     }
 }
