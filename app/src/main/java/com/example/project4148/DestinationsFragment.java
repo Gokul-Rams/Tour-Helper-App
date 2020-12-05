@@ -64,7 +64,7 @@ public class DestinationsFragment extends Fragment implements destinationlistlis
         selectbackbtn = view.findViewById(R.id.Select_back_btn_destination_queue);
         cbselectall = view.findViewById(R.id.cb_selectall_destination_queue);
         addtoqueuebtn = view.findViewById(R.id.addtoqueue_destination_main);
-        selectbtn = view.findViewById(R.id.select_btn_destination_main);
+        selectbtn = view.findViewById(R.id.chatbtn_chatlist_fragment);
 
         toolbar = getActivity().findViewById(R.id.home_toolbar);
         toolbar.setOnMenuItemClickListener(this);

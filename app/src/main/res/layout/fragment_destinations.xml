@@ -61,7 +61,7 @@
                 app:srcCompat="@drawable/icon_filter" />
 
             <ImageButton
-                android:id="@+id/select_btn_destination_main"
+                android:id="@+id/chatbtn_chatlist_fragment"
                 android:layout_width="60dp"
                 android:layout_height="0dp"
                 android:background="@null"
@@ -75,7 +75,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/select_btn_destination_main"
+                app:layout_constraintEnd_toStartOf="@+id/chatbtn_chatlist_fragment"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_selectall_destination_queue" />
         </androidx.constraintlayout.widget.ConstraintLayout>
