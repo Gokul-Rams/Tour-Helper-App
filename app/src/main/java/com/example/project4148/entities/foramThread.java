@@ -1,10 +1,15 @@
 package com.example.project4148.entities;
 
+import android.widget.ArrayAdapter;
+
+import java.util.ArrayList;
+
 public class foramThread {
     String title;
     String destination;
     String poster;
     String description;
+    public ArrayList<String> commends = new ArrayList<>();
 
     public foramThread(String title, String destination, String poster, String description) {
         this.title = title;

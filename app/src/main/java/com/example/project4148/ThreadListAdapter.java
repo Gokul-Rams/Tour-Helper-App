@@ -65,6 +65,7 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.my
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(parentcontext, ThreadDetailsActivity.class);
+                    intent.putExtra("position",getPosition());
                     parentcontext.startActivity(intent);
                 }
             });

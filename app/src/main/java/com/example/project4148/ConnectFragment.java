@@ -32,7 +32,7 @@ public class ConnectFragment extends Fragment {
         adap = new ThreadListAdapter(getContext());
         rectclerconnect.setAdapter(adap);
         rectclerconnect.setLayoutManager(new LinearLayoutManager(getContext()));
-        adap.threadlist.add(new foramThread("How good is Tajmahal","Agra","Gokul","Looking ahead to visit agra how good is the destination in agra"));
+        Applicationclass.threadlist.add(new foramThread("How good is Tajmahal","Agra","Gokul","Looking ahead to visit agra how good is the destination in agra"));
         adap.threadlist.addAll(Applicationclass.threadlist);
         adap.notifyDataSetChanged();
 
@@ -50,5 +50,13 @@ public class ConnectFragment extends Fragment {
     public void menuitemclicked(MenuItem item)
     {
 
+    }
+
+    @Override
+    public void onStart() {
+        adap.threadlist.clear();
+        adap.threadlist.addAll(Applicationclass.threadlist);
+        adap.notifyDataSetChanged();
+        super.onStart();
     }
 }
